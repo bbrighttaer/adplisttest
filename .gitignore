@@ -232,4 +232,10 @@ cython_debug/
 pyvenv.cfg
 pip-selfcheck.json
 
+# MS Word temporary files
+~*.docx
+
+*.ps1
+
+
 # End of https://www.toptal.com/developers/gitignore/api/django,python,virtualenv
