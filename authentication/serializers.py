@@ -90,22 +90,13 @@ class RequestEmailVerificationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
 
     email = serializers.EmailField(max_length=255, min_length=3)
-    password = serializers.CharField(
-        max_length=68, min_length=6, write_only=True)
-    username = serializers.CharField(
-        max_length=255, min_length=6, read_only=True)
-    tokens = serializers.CharField(
-        max_length=555, min_length=6, read_only=True)
-    is_staff = serializers.BooleanField(default=False, read_only=True)
-    created_at = serializers.DateTimeField(read_only=True)
-    updated_at = serializers.DateTimeField(read_only=True)
+    password = serializers.CharField(max_length=68, min_length=6, write_only=True)
+    username = serializers.CharField(max_length=255, min_length=6, read_only=True)
+    tokens = serializers.CharField(max_length=555, min_length=6, read_only=True)
 
     class Meta:
         model = User
-        fields = ['title', 'username', 'firstName', 'lastName',
-                  'email',  'password', 'location', 'employer',
-                  'expertise', 'is_mentor', 'mentorship_areas',
-                  'tokens', 'is_staff', 'created_at', 'updated_at']
+        fields = ['email', 'password', 'username', 'tokens']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -121,7 +112,7 @@ class LoginSerializer(serializers.ModelSerializer):
                 'Account disabled, contact adinistrator')
 
         if not user.is_verified:
-            raise AuthenticationFailed('Email is not verified')
+            raise AuthenticationFailed('Account is not verified')
 
         return {
             'email': user.email,

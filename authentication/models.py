@@ -68,8 +68,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['firstName', 'lastName', 'email', 'location']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['firstName', 'lastName', 'username', 'location']
 
     objects = UserManager()
 
@@ -81,7 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.expertise = eval(self.expertise)
 
     def __str__(self) -> str:
-        return self.username
+        return self.email
 
     def tokens(self):
         refresh = RefreshToken.for_user(self)
