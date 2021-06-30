@@ -52,14 +52,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True, db_index=True)
     location = models.CharField(max_length=255)
     employer = models.CharField(max_length=50)
-    expertise = models.CharField(max_length=555, blank=True)
+    expertise = models.CharField(max_length=555, blank=True, null=True)
     is_mentor = models.BooleanField(default=False)
 
     # False always for a member (assumes that a user cannot be a member and a mentor simultaneously)
     is_mentor_approved = models.BooleanField(default=False)
 
     # Applicable to mentors only
-    mentorship_areas = models.CharField(max_length=555, blank=True)
+    mentorship_areas = models.CharField(max_length=555, blank=True, null=True)
 
     # Internal records keeping
     is_verified = models.BooleanField(default=False)

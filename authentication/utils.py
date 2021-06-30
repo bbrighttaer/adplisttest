@@ -19,6 +19,8 @@ MENTORSHIP_AREAS = [
     ('Interview Techniques', 'Interview Techniques'),
 ]
 
+USER_TYPE = [('mentor', 'mentor'), ('member', 'member')]
+
 class Util:
 
     @staticmethod

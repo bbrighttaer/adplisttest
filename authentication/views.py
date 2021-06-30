@@ -1,11 +1,10 @@
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.shortcuts import render
 from django.utils.encoding import DjangoUnicodeDecodeError, smart_bytes, smart_str
-import drf_yasg
 from rest_framework import generics, serializers, status, views
 from .serializers import (RegisterSerializer, EmailVerificationSerializer, LoginSerializer,
                           ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer,
-                          RequestEmailVerificationSerializer)
+                          RequestEmailVerificationSerializer, DummySerializer)
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
@@ -16,7 +15,7 @@ import jwt
 from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from .renderers import UserRenderer
+from .renderers import OutBoundDataRenderer
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 # Create your views here.
@@ -42,7 +41,7 @@ def send_verification_link(user, request):
 class RegisterView(generics.GenericAPIView):
 
     serializer_class = RegisterSerializer
-    renderer_classes = (UserRenderer, )
+    renderer_classes = (OutBoundDataRenderer, )
 
     def post(self, request):
         user = request.data
@@ -60,6 +59,7 @@ class RegisterView(generics.GenericAPIView):
 class VerifyEmail(views.APIView):
 
     serializer_class = EmailVerificationSerializer
+    renderer_classes = [OutBoundDataRenderer]
 
     token_param_config = openapi.Parameter('token', in_=openapi.IN_QUERY,
                                            description='Activation token',
@@ -95,6 +95,7 @@ class VerifyEmail(views.APIView):
 class RequestEmailVerifyAPIView(views.APIView):
 
     serializer_class = RequestEmailVerificationSerializer
+    renderer_classes = [OutBoundDataRenderer]
 
     @swagger_auto_schema(responses={200: 'Success'},
                          request_body=RequestEmailVerificationSerializer)
@@ -114,7 +115,7 @@ class RequestEmailVerifyAPIView(views.APIView):
 class LoginAPIView(generics.GenericAPIView):
 
     serializer_class = LoginSerializer
-    renderer_classes = (UserRenderer, )
+    renderer_classes = [OutBoundDataRenderer]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -125,6 +126,7 @@ class LoginAPIView(generics.GenericAPIView):
 class RequestPasswordResetEmail(generics.GenericAPIView):
 
     serializer_class = ResetPasswordEmailRequestSerializer
+    renderer_classes = [OutBoundDataRenderer]
 
     def post(self, request):
         serializer = self.serializer_class()
@@ -156,6 +158,8 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 
 
 class PasswordTokenCheckAPIView(generics.GenericAPIView):
+    renderer_classes = [OutBoundDataRenderer]
+    serializer_class = DummySerializer
 
     def get(self, request, uidb64, token):
         try:
