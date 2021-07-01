@@ -37,5 +37,6 @@ urlpatterns = [
     path('auth/', include('authentication.urls')),
     path('app/', include('adpapp.urls')),
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/api.json/', schema_view.without_ui(cache_timeout=0), name='schema-swagger-json'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

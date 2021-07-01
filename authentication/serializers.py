@@ -1,4 +1,4 @@
-from authentication.utils import EXPERTISE, MENTORSHIP_AREAS
+from authentication.utils import EXPERTISE, MENTORSHIP_AREAS, MENTOR_STATUS
 from django.contrib import auth
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
@@ -24,6 +24,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(max_length=68, min_length=6, write_only=True)
     is_staff = serializers.BooleanField(default=False, read_only=True)
+    mentor_status = serializers.ChoiceField(read_only=True, choices=MENTOR_STATUS)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
     expertise = fields.MultipleChoiceField(choices=EXPERTISE, allow_blank=True)

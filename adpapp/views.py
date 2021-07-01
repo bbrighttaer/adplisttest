@@ -95,4 +95,8 @@ class MentorsListAPIView(UserListAPIView):
     @swagger_auto_schema(manual_parameters=[filter_param_config],
                          response=UserProfileSerializer)
     def get(self, request):
-        return super().get(request)
+        filter_opt = request.GET.get('filter')
+        selected = self.get_queryset().filter(
+            mentor_status=filter_opt) if filter_opt else self.get_queryset()
+        serializer = self.serializer_class(selected, many=True)
+        return Response({'results': serializer.data}, status=status.HTTP_200_OK)

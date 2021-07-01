@@ -12,28 +12,14 @@ class UserManager(BaseUserManager):
     def create_user(self, *args, **kwargs):
         email = kwargs.pop('email') if 'email' in kwargs else None
         password = kwargs['password'] if 'password' in kwargs else None
-
-        # if username is None:
-        #     raise TypeError('Users should have a username')
-
-        # if email is None:
-        #     raise TypeError('Users should have a Email')
-
         user = self.model(email=self.normalize_email(email), **kwargs)
         user.set_password(password)
+        if kwargs['joined_as'] is 'mentor':
+            user.mentor_status = 'pending'
         user.save()
         return user
 
     def create_superuser(self, *args, **kwargs):
-        # if username is None:
-        #     raise TypeError('Users should have a username')
-
-        # if password is None:
-        #     raise TypeError('Users should not be empty')
-
-        # if email is None:
-        #     raise TypeError('Users should have a Email')
-
         user = self.create_user(*args, **kwargs)
         user.is_superuser = True
         user.is_staff = True
@@ -54,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     employer = models.CharField(max_length=50)
     expertise = models.CharField(max_length=555, blank=True, null=True)
     joined_as = models.CharField(default='member', choices=USER_TYPE, max_length=10)
-    mentor_status = models.CharField(default='not applicable', choices=MENTOR_STATUS, max_length=10)
+    mentor_status = models.CharField(default='not applicable', choices=MENTOR_STATUS, max_length=20)
 
     # Applicable to mentors only
     mentorship_areas = models.CharField(max_length=555, blank=True, null=True)
