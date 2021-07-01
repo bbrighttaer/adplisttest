@@ -1,5 +1,4 @@
 from rest_framework import renderers
-import json
 
 class OutBoundDataRenderer(renderers.JSONRenderer):
     charset = 'utf-8'
@@ -7,11 +6,11 @@ class OutBoundDataRenderer(renderers.JSONRenderer):
     def render(self, data, accepted_media_type=None, renderer_context=None):
         response = ''
         if 'ErrorDetail' in str(data):
-            response = json.dumps({
+            response = super().render({
                 'errors': data
             })
         else:
-            response = json.dumps({
+            response = super().render({
                 'data': data
             })
         return  response

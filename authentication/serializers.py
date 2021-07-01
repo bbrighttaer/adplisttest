@@ -33,7 +33,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ['title', 'username', 'firstName', 'lastName',
                   'email',  'password', 'location', 'employer',
-                  'expertise', 'is_mentor', 'mentorship_areas',
+                  'expertise', 'joined_as', 'mentor_status', 'mentorship_areas',
                   'expertise', 'is_staff', 'created_at', 'updated_at']
 
     def validate(self, attrs):        
@@ -41,7 +41,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         # attributes
         password = get_param('password')
-        is_mentor = get_param('is_mentor')
+        is_mentor = get_param('joined_as') == 'mentor'
         mentorship_areas = get_param('mentorship_areas')
         expertise = get_param('expertise')
 
@@ -88,7 +88,7 @@ class RequestEmailVerificationSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
-
+    
     email = serializers.EmailField(max_length=255, min_length=3)
     password = serializers.CharField(max_length=68, min_length=6, write_only=True)
     username = serializers.CharField(max_length=255, min_length=6, read_only=True)
@@ -96,7 +96,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'username', 'tokens']
+        fields = ['id', 'email', 'password', 'username', 'tokens']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -115,6 +115,7 @@ class LoginSerializer(serializers.ModelSerializer):
             raise AuthenticationFailed('Account is not verified')
 
         return {
+            'id': user.id,
             'email': user.email,
             'username': user.username,
             'tokens': user.tokens()

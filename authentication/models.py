@@ -1,4 +1,4 @@
-from authentication.utils import EXPERTISE, MENTORSHIP_AREAS, TITLE
+from authentication.utils import EXPERTISE, MENTORSHIP_AREAS, TITLE, MENTOR_STATUS, USER_TYPE
 from django.db import models
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import (
@@ -53,10 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     location = models.CharField(max_length=255)
     employer = models.CharField(max_length=50)
     expertise = models.CharField(max_length=555, blank=True, null=True)
-    is_mentor = models.BooleanField(default=False)
-
-    # False always for a member (assumes that a user cannot be a member and a mentor simultaneously)
-    is_mentor_approved = models.BooleanField(default=False)
+    joined_as = models.CharField(default='member', choices=USER_TYPE, max_length=10)
+    mentor_status = models.CharField(default='not applicable', choices=MENTOR_STATUS, max_length=10)
 
     # Applicable to mentors only
     mentorship_areas = models.CharField(max_length=555, blank=True, null=True)
