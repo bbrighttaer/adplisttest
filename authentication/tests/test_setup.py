@@ -10,9 +10,17 @@ class TestSetup(APITestCase):
         self.fake = Faker()
 
         self.user_data = {
+            'title': 'Mr',
             'email': self.fake.email(),
-            'username': self.fake.email().split('@')[0],
-            'password': self.fake.email(),
+            'username': self.fake.name(),
+            'password': '@Admin123',
+            'firstName': self.fake.name(),
+            'lastName': self.fake.name(),
+            'location': 'Accra',
+            'employer': self.fake.company(),
+            'joined_as': 'mentor',
+            'expertise': ['UI/UX Design'],
+            'mentorship_areas': ['Career Advice']
         }
         return super().setUp()
 
