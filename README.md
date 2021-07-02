@@ -1,1 +1,1 @@
-adplisttest
+[![CircleCI](https://circleci.com/gh/bbrighttaer/adplisttest/tree/master.svg?style=svg)](https://circleci.com/gh/bbrighttaer/adplisttest/tree/master)
