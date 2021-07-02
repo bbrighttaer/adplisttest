@@ -14,7 +14,7 @@ class UserManager(BaseUserManager):
         password = kwargs['password'] if 'password' in kwargs else None
         user = self.model(email=self.normalize_email(email), **kwargs)
         user.set_password(password)
-        if kwargs['joined_as'] is 'mentor':
+        if kwargs['joined_as'] == 'mentor':
             user.mentor_status = 'pending'
         user.save()
         return user
