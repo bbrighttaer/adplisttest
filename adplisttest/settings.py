@@ -172,4 +172,4 @@ EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD')
 
 # Heroku
-django_heroku.settings(locals())
+django_heroku.settings(locals(), test_runner=False)
