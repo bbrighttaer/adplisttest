@@ -14,13 +14,13 @@ class UserManager(BaseUserManager):
         password = kwargs['password'] if 'password' in kwargs else None
         user = self.model(email=self.normalize_email(email), **kwargs)
         user.set_password(password)
-        if kwargs['joined_as'] == 'mentor':
+        if 'joined_as' in kwargs and kwargs['joined_as'] == 'mentor':
             user.mentor_status = 'pending'
         user.save()
         return user
 
     def create_superuser(self, *args, **kwargs):
-        user = self.create_user(*args, **kwargs)
+        user = self.create_user( *args, **kwargs)
         user.is_superuser = True
         user.is_staff = True
         user.is_verified = True
