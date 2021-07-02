@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 from datetime import timedelta
 import django_heroku
@@ -98,7 +99,13 @@ DATABASES = {
     # }
 }
 
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# To switch between Postgresql DBs in CI (for testing) and in production
+if 'test' in sys.argv:
+    DATABASES['default'] = dj_database_url.config(env='TEST_DATABASE_URL', conn_max_age=600, ssl_require=True)
+    DATABASES['default']['TEST'] = {'NAME': DATABASES['default']['NAME']}
+else:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+    DATABASES['default']['TEST'] = {'NAME': DATABASES['default']['NAME']}
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
